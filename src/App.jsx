@@ -1,18 +1,64 @@
+import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 
+const API_KEY = "0d9d6fa642662e53t328bfec1ado0b77";
+const DEFAULT_CITY = "Boston";
+
 export default function App() {
+  const [city, setCity] = useState("");
+  const [weatherData, setWeatherData] = useState(null);
+
+  function handleCityChange(event) {
+    setCity(event.target.value);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    getWeather(city);
+  }
+
+  function getWeather(cityName) {
+    const apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityName}&key=${API_KEY}`;
+    axios.get(apiUrl).then(showWeather);
+  }
+
+  function showWeather(response) {
+    setWeatherData({
+      city: response.data.city,
+      description: response.data.condition.description,
+      humidity: response.data.humidity,
+      temperature: Math.round(response.data.temperature.current),
+      wind: response.data.wind.speed,
+      icon: (
+        <img
+          src={response.data.condition.icon_url}
+          alt={response.data.condition.description}
+        />
+      ),
+    });
+  }
+
+  useEffect(() => {
+    getWeather(DEFAULT_CITY);
+  }, []);
+
+  if (!weatherData) {
+    return null;
+  }
+
   return (
     <div>
       <div className="weather-app">
         <header>
-          <form id="search-form">
+          <form id="search-form" onSubmit={handleSubmit}>
             <input
               type="search"
               placeholder="Enter a city.."
               required
               className="search-input"
               id="search-input"
+              onChange={handleCityChange}
             />
             <input type="submit" value="Search" className="search-button" />
           </form>
@@ -21,20 +67,23 @@ export default function App() {
           <div className="current-weather">
             <div>
               <h1 className="current-city" id="current-city">
-                Paris
+                {weatherData.city}
               </h1>
               <p className="current-details">
-                <span id="current-date"></span> moderate rain <br />
-                Humidity: <strong>87%</strong>, Wind: <strong>7.2km/h</strong>
+                {weatherData.description} <br />
+                Humidity: <strong>{weatherData.humidity}%</strong>, Wind:{" "}
+                <strong>{weatherData.wind}km/h</strong>
               </p>
             </div>
             <div className="current-temperature">
-              <span className="current-temperature-icon">☀️</span>
+              <span className="current-temperature-icon">
+                {weatherData.icon}
+              </span>
               <span
                 className="current-temperature-value"
                 id="current-temperature"
               >
-                24
+                {weatherData.temperature}
               </span>
               <span className="current-temperature-unit">°C</span>
             </div>
@@ -42,20 +91,24 @@ export default function App() {
         </main>
         <footer>
           <p>
-            This project was coded by
-            <a href="https://github.com/FabianaResstel" target="_blank">
+            This project was coded by{" "}
+            <a
+              href="https://github.com/FabianaResstel"
+              target="_blank"
+              rel="noreferrer"
+            >
               Fabiana Resstel
             </a>{" "}
-            and is
+            and is{" "}
             <a
               href="https://github.com/FabianaResstel/ReactTest"
               target="_blank"
+              rel="noreferrer"
             >
-              {" "}
               on GitHub
             </a>{" "}
-            and
-            <a href="#" target="_blank">
+            and{" "}
+            <a href="#" target="_blank" rel="noreferrer">
               hosted on Netlify
             </a>
           </p>
