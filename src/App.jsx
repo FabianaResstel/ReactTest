@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
+import Forecast from "./forecast";
 
 const API_KEY = "0d9d6fa642662e53t328bfec1ado0b77";
 const DEFAULT_CITY = "Boston";
@@ -27,9 +28,9 @@ export default function App() {
     setWeatherData({
       city: response.data.city,
       description: response.data.condition.description,
-      humidity: response.data.humidity,
+      humidity: Math.round(response.data.temperature.humidity),
       temperature: Math.round(response.data.temperature.current),
-      wind: response.data.wind.speed,
+      wind: Math.round(response.data.wind.speed).toFixed(1),
       icon: (
         <img
           src={response.data.condition.icon_url}
@@ -69,10 +70,18 @@ export default function App() {
               <h1 className="current-city" id="current-city">
                 {weatherData.city}
               </h1>
+              <div className="current-day">
+                {new Date().toLocaleDateString("en-US", {
+                  weekday: "long",
+                  month: "numeric",
+                  day: "numeric",
+                })}
+              </div>
+
               <p className="current-details">
                 {weatherData.description} <br />
                 Humidity: <strong>{weatherData.humidity}%</strong>, Wind:{" "}
-                <strong>{weatherData.wind}km/h</strong>
+                <strong>{weatherData.wind} km/h</strong>
               </p>
             </div>
             <div className="current-temperature">
@@ -88,6 +97,7 @@ export default function App() {
               <span className="current-temperature-unit">°C</span>
             </div>
           </div>
+          <Forecast city={weatherData.city} />
         </main>
         <footer>
           <p>

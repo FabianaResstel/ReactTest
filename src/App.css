@@ -66,6 +66,7 @@ main {
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+  text-transform: capitalize;
 }
 
 .current-details strong {
@@ -74,7 +75,7 @@ main {
 
 .current-temperature-icon {
   position: relative;
-  top: -8px;
+  top: 5px;
   font-size: 40px;
   margin-right: 10px;
 }
@@ -96,4 +97,37 @@ footer {
   padding-top: 15px;
 
   color: rgba(39, 33, 66, 0.4);
+}
+
+.forecast {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0;
+}
+
+.forecast-card {
+  text-align: center;
+  width: 18%;
+}
+
+.forecast-day {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.forecast-icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 8px;
+}
+
+.forecast-temperature {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.current-day {
+  color: rgba(39, 33, 66, 0.4);
+  font-size: 16px;
+  margin: 5px 0 10px;
 }
